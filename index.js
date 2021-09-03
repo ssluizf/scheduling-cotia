@@ -6,7 +6,6 @@ const puppeteer = require('puppeteer');
   const page = await browser.newPage();
 
   await page.goto("https://agendamentocotia.saudesimples.net/");
-  page.setDefaultNavigationTimeout(60000);
 
   try {
     await page.click('[id="inputUnchecked"]');
@@ -24,11 +23,16 @@ const puppeteer = require('puppeteer');
       elements.item(1).click();
     });
     await page.waitForSelector('div[class="placeholder_vagas mx-auto mt-4"]');
-    console.log("Doses esgotadas neste momento, aguardar abertura de nova agenda.");
+    console.log("\x1b[31m%s\x1b[0m", "\nDoses esgotadas neste momento, aguardar abertura de nova agenda.");
 
   } catch {
-    console.log("Possivelmente tem dose! Confirma lá no site.");
+    console.log("\x1b[32m%s\x1b[0m", "\nPossivelmente tem dose!");
   } finally {
+    await page.screenshot({
+      path: "./screenshot.png",
+      fullPage: true
+    });
+    console.log("Confirma aí! Dá uma olhada na screenshot do site dentro dessa pasta.\n")
     browser.close()
   }
   
